@@ -1,9 +1,7 @@
 
-
-
-%Cargo los packages que me van a servir despues
 %pkg load control;
 %pkg load signal;
+
 
 %Inicializo las variables de navegacion
 volver_atras = 0;
@@ -12,8 +10,10 @@ sel_menu_ppal = 0;
 
 
 %Inicializo variables para pedir datos despues
+%matriz diagonalmente dominante = [5 2 1; 0 -3 2; -4 1 6]
 prompt = {'Ingrese la matriz de coeficientes(A)','Ingrese la matriz de incognitas(X)','Ingrese la matriz de terminos independientes(B)'};
-defaults = {'[1 2 3; 4 5 6; 7 8 10]','[11;13]','[1;1]'};
+%la matriz [1 2 3; 4 5 6; 7 8 10] no es diagonalmente dominante..
+defaults = {'[1 2 3; 4 5 6; 7 8 10]','[11; 13]','[1; 1]'};
 
 
 %Verifico que no elija la opcion finalizar
@@ -28,22 +28,37 @@ while (sel_menu_ppal~= 4)
       volver_menu_ppal = 0;
   end
   
-  
   switch sel_menu_ppal
       case 1
           switch opcion          
               case 0
                   sel_menu_ppal = 1; 
                   dims = inputdlg(prompt,'Ingreso de datos',3, defaults);
-                  A= [ 4 5; 1 3];
-                  X= dims{2};
-                  C= dims{3};
+                  if(dims{1} == ""  || dims{2} == ""  || dims{3} == "" )
+                   p=questdlg('No pueden haber campos vacios','TP SUPERIOR','Ok','Ok');
+                  switch p
+                  case 'Ok'
+                  opcion = 0;
+                  sel_menu_ppal = 1; 
+                  end
+                  else
+                  A= str2num(dims{1});
+                  X= str2num(dims{2});
+                  B= str2num(dims{3});
                   esDominante= matrizDiagonalDominante(A,'');
-                  esEstrictamenteDom = matrizDiagonalDominante(A,'strict')
+                  esEstrictamenteDom = matrizDiagonalDominante(A,'estricta');
                   if( esDominante == 1 || esEstrictamenteDom== 1)
                   opcion = 1;
                   else
-                  msgbox('La matriz debe ser Diagonalmente dominante, vuelva a intentarlo', 'TP SUPERIOR','warning');
+                  h=questdlg('La matriz debe ser Diagonalmente dominante, vuelva a intentarlo','TP SUPERIOR','Modificar matriz','Volver','Volver');
+                  switch h
+                  case 'Modificar matriz'
+                  sel_menu_ppal = 1; 
+                  opcion = 0;
+                  case 'Volver'
+                  volver_menu_ppal = 1;
+                  end
+                  end
                   end
               case 1
                   sel_menu1 = menu('Por favor seleccione un metodo:','1) Metodo Jacobi.','2) Metodo gauss-seidel',' - Volver atras - ',' - Ir al menu principal -');
@@ -85,6 +100,23 @@ while (sel_menu_ppal~= 4)
           disp('Opcion 2');
           dims = inputdlg (prompt,'Ingreso de datos',3, defaults);
           volver_menu_ppal = 1;
+                  A= str2num(dims{1});
+                  X= str2num(dims{2});
+                  B= str2num(dims{3});
+                  esDominante= matrizDiagonalDominante(A,'');
+                  esEstrictamenteDom = matrizDiagonalDominante(A,'estricta');
+                  if( esDominante == 1 || esEstrictamenteDom== 1)
+                  opcion = 1;
+                  else
+                  h=questdlg('La matriz debe ser Diagonalmente dominante, vuelva a intentarlo','TP SUPERIOR','Modificar matriz','Volver','Volver');
+                  switch h
+                  case 'Modificar matriz'
+                  sel_menu_ppal = 1; 
+                  opcion = 0;
+                  case 'Volver'
+                  volver_menu_ppal = 1;
+                  end
+                  end
       case 3
           disp('Opcion 3')
           volver_menu_ppal = 1;
@@ -94,28 +126,3 @@ while (sel_menu_ppal~= 4)
   end
 end
 
-function flag = matrizDiagonalDominante( A, strOpt )
-
-    if nargin == 1
-        strOpt = ''; 
-    elseif nargin ~= 2
-        error('domdiag: invalid input parameters');
-    end
-    
-    [ m , n ] = size(A);
-    if m ~= n
-        error('domdiag: input matrix must have dimension rows==cols');
-    end
-    
-    absDiag  = abs(diag(A));
-   
-    absElem = sum(abs(A), 2) - absDiag;
-    
-    flag = all(absElem <= absDiag);
-    
-    
-    if strcmpi(strOpt, 'strict') && flag == true
-        flag = any(absElem  < absDiag);
-    end
-    
-end
