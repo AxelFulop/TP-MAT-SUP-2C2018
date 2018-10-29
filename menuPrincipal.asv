@@ -12,10 +12,8 @@ sel_menu_ppal = 0;
 %Inicializo variables para pedir datos despues
 %matriz diagonalmente dominante = [5 2 1; 0 -3 2; -4 1 6]
 prompt = {'Ingrese la matriz de coeficientes(A)','Ingrese la matriz de incognitas(X)','Ingrese la matriz de terminos independientes(B)'};
-prompt2 = {'ingrese el vector inicial','ingrese la cantidad de decimales','ingrese la cota de error'};
 %la matriz [1 2 3; 4 5 6; 7 8 10] no es diagonalmente dominante..
 defaults = {'[5 2 1; 0 -3 2; -4 1 6]','[11; 13]','[1; 1]'};
-defaults2 = {'[x;y;z]','3','4'};
 
 
 %Verifico que no elija la opcion finalizar
@@ -66,19 +64,11 @@ while (sel_menu_ppal~= 4)
                   sel_menu1 = menu('Por favor seleccione un metodo:','1) Metodo Jacobi.','2) Metodo gauss-seidel','calcular normas',' - Volver atras - ',' - Ir al menu principal -');
                   switch sel_menu1 
                       case 1
-                     dims2 = inputdlg(prompt,'Ingreso de datos',3, defaults2);
-                     vec0 = str2num(dims2{1});
-                     cantDec = str2num(dims2{2});
-                     error = str2num(dims2{3});
-                     %jacobi
-                     volver_atras = 1;
+                          disp('jacobi');
+                          volver_atras = 1;
                       case 2
-                      dims2 = inputdlg(prompt,'Ingreso de datos',3, defaults2);
-                     vec0 = str2num(dims2{1});
-                     cantDec = str2num(dims2{2});
-                     error = str2num(dims2{3});
-                     %seidel
-                     volver_atras = 1;
+                          disp('gauss-seidel');
+                          volver_atras = 1;
                       case 3
                    sel_menu12 = menu('Seleccione una opcion','1)Norma 1','2)Norma 2','3)Norma inf',' - Volver atras  normas-',' - Ir al menu principal - ');
                   switch sel_menu12
@@ -103,13 +93,11 @@ while (sel_menu_ppal~= 4)
                           volver_menu_ppal = 1;
                           volver_atras = 0;
                   end
-              case 4
-              volver_atras=1;
-              volver_menu_ppal = 0;
-              opcion = 1;   
-            case 5
-          volver_menu_ppal = 1;
-          volver_atras = 0;
+                      case 4
+                      volver_atras=1;
+                          volver_menu_ppal = 0;
+                          opcion = 1;   
+                          
                           
               end
                   
