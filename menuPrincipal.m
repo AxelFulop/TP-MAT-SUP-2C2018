@@ -11,8 +11,19 @@ prompt = {'Ingrese la matriz de coeficientes(A)','Ingrese la matriz de terminos 
 prompt2 = {'ingrese el vector inicial (X)','ingrese la cantidad de decimales','ingrese la cota de error'};
 %la matriz [1 2 3; 4 5 6; 7 8 10] no es diagonalmente dominante..
 
-defaults = {'[3 1 1; 2  -4 -1; 0 5 -6]','[1;2;3]'};
-defaults2 = {'[0;0;0]','2','1e-6'};
+%ejercicio de la catedra...
+%[7 -1 4; 3 -8 2; 4 1 -6] A
+%[8;-4;3] B
+%[0;0;0] X
+%e = 0,03
+
+% 1,058  1,001  0,381  jacobi
+% 1,064  0,995  0,375  seidel
+
+
+
+defaults = {'[7 -1 4; 3 -8 2; 4 1 -6]','[8;-4;3]'};
+defaults2 = {'[0;0;0]','3','0.03'};
 
 
 %Verifico que no elija la opcion finalizar
@@ -58,7 +69,7 @@ while (sel_menu_ppal~= 4)
                   end
                   end
               case 1
-                  sel_menu1 = menu('Por favor seleccione un metodo:','1) Metodo Jacobi.','2) Metodo gauss-seidel','calcular normas',' - Volver atras - ',' - Ir al menu principal -');
+                  sel_menu1 = menu('Por favor seleccione un metodo:','1) Metodo Jacobi.','2) Metodo gauss-seidel','calcular normas',' -Ingresar nuevos datos - ',' - Finalizar-');
                   switch sel_menu1 
                       case 1
                      dims2 = inputdlg(prompt2,'Ingreso de datos',3, defaults2);
@@ -77,8 +88,8 @@ while (sel_menu_ppal~= 4)
                     display(acotDec(cantDec2,sol2));
                      volver_atras = 1;
                       case 3
-                   sel_menu12 = menu('Seleccione una opcion','1)Norma 1','2)Norma 2','3)Norma inf',' - Volver atras  normas-',' - Ir al menu principal - ');
-                  switch sel_menu12
+                   sel_menu2 = menu('Seleccione una opcion','1)Norma 1','2)Norma 2','3)Norma inf',' - Volver atras-',' -Finalizar- ');
+                  switch sel_menu2
                       case 1
                        norm1 = norm(A,1);
                        msgnorm1 = sprintf('el valor de la norma 1 es: %d',norm1);
@@ -95,20 +106,19 @@ while (sel_menu_ppal~= 4)
                       case 4
                           volver_atras=1;
                           volver_menu_ppal = 0;
-                          opcion = 1;
+                          
                       case 5
-                          volver_menu_ppal = 1;
-                          volver_atras = 0;
+                           
+                      break;
                        end
               case 4
-              volver_atras=1;
-              volver_menu_ppal = 0;
-              opcion = 1;   
+                  dims3 = inputdlg(prompt,'Ingreso de datos',2, defaults);
+                  A= str2num(dims3{1});
+                  B= str2num(dims3{2});   
             case 5
-          volver_menu_ppal = 1;
-          volver_atras = 0;
-                          
-              end
+           
+              break;                
+               end
                   
           end
               
