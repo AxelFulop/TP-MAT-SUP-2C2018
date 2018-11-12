@@ -1,27 +1,20 @@
-function[y,err,it]= jacobi(A,b,maxiter,epsilon)
-% y es vector solución
-% err es el error final
-% it es el numero de iteraciones final
-% A matriz del sistema
-% b vector del sistema
-% maxiter es numero máximo de iteraciones
-% epsilon es la cota del error
-n=length(b);
-it=0;
-err=2*epsilon;
-x=zeros(1,n);
-y=zeros(1,n);
-while it<maxiter && err>epsilon
-    for i=1:n
-        S=0;
-       for j=1:n
-       if i~=j
-        S=S+A(i,j)*x(j);
-       end
-       end
-       y(i)=(b(i)-S)/A(i,i);
-    end
-    it=it+1;
-    err=norm(x-y,1);
-    x=y;
+
+%Funcion que me permite calcular las soluciones de un sistema
+%Se utiliza el metodo de paro del error
+%Se puede utilizar un metodo de paro que sea hasta unas n iteraciones
+%maximas?
+function [res] = metodoJacobi(A,B,X0,error)
+D= diag(diag(A));
+L = tril(A,-1);
+U = triu(A,1);
+err = 1;
+x1 = 1;
+xi = X0;
+while err > error
+x1 = -inv(D) * (L+U) * X0 + inv(D)*B;
+err = sum(abs(x1-xi));
+xi = X0;
+X0 = x1;
+end
+res = x1;
 end
